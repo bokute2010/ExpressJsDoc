@@ -9,17 +9,18 @@
 const express = require('express');
 const app = express();
 
-const myLogger = (req,res,next)=>{
-    console.log('Logged');
+
+const requestTime = function(req,res,next){
+    req.requestTime = new Date;
     next();
 }
-app.use(myLogger);
 
-app.get('/',function(req,res,next){
-    res.send("Hello world !")
-    next();
+app.use(requestTime);
+
+app.get('/',function(req,res){
+    var responseText = 'Hello World <br>';
+    responseText += '<small>Requested at: ' + req.requestTime + '</small>';
+    res.send(responseText)
 })
-
-
 
 app.listen(3000);
